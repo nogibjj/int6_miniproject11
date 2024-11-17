@@ -2,65 +2,56 @@ import os
 import pytest
 from mylib.lib import (
     extract,
-    load_data,
-    query,
-    transform_data,
-    create_spark_session,
-    end_spark_session,
+    transform_and_load,
+    query_data,
+    visualize,
 )
 
 
 @pytest.fixture(scope="module")
 def spark():
-    spark = create_spark_session()
-    yield spark
-    end_spark_session(spark)
+    """Fixture to provide the pre-initialized Spark session in Databricks."""
+    from pyspark.sql import SparkSession
+    return SparkSession.builder.getOrCreate()
 
 
 def test_extract():
-    file_path = extract()
-    assert os.path.exists(file_path) is True
+    """Test the extract function to ensure data is uploaded to DBFS."""
+    # Run the extraction step
+    extract()
+
+    # Assert the file exists in DBFS
+    dbfs_file_path = "dbfs:/FileStore/tables/nutrition.csv"
+    assert os.path.exists(f"/dbfs{dbfs_file_path[5:]}") is True
 
 
-def test_load_data(spark):
-    df = load_data(spark)
-    assert df is not None
+def test_transform_and_load(spark):
+    """Test the transform and load step."""
+    # Run transformation and loading to Delta table
+    transform_and_load()
+
+    # Assert that the Delta table exists
+    result = spark.sql("SHOW TABLES LIKE 'nutrition_delta'")
+    assert result.count() > 0
 
 
-def test_query(spark):
-    my_query = """SELECT 
-        ID, 
-        SODAFREQ, 
-        EGGSFREQ, 
-        FRIESFREQ 
-    FROM Nutrition 
-    WHERE SODAFREQ > 3 
-    ORDER BY SODAFREQ DESC 
-    LIMIT 5"""
-    my_query_2 = """SELECT 
-        AVG(EGGSFREQ) as avg_eggs,
-        AVG(GREENSALADFREQ) as avg_salad,
-        AVG(FRIESFREQ) as avg_fries,
-        AVG(MILKFREQ) as avg_milk,
-        AVG(SODAFREQ) as avg_soda,
-        AVG(COFFEEFREQ) as avg_coffee,
-        AVG(CAKESFREQ) as avg_cakes
-    FROM Nutrition"""
-    df = load_data(spark)
-    result = query(spark, df, my_query)
-    result2 = query(spark, df, my_query_2)
+def test_query_data(spark):
+    """Test querying the Delta table."""
+    # Run the query
+    result = query_data()
+
+    # Assert that the query returned results
     assert result is not None
-    assert result2 is not None
+    assert len(result) > 0
 
 
-def test_transform(spark):
-    df = load_data(spark)
-    result = transform_data(df)
-    assert result is not None
+def test_visualize(spark):
+    """Test the visualization step."""
+    # Run a query to get data
+    result = query_data()
 
+    # Generate visualization
+    visualize(result)
 
-if __name__ == "__main__":
-    test_extract()
-    test_load_data(spark)
-    test_query(spark)
-    test_transform(spark)
+    # Assert the visualization file was created
+    assert os.path.exists("nutrition_viz.png") is True
