@@ -30,3 +30,4 @@ pyspark
 requests
 ruff
 tabulate
+python-dotenv
