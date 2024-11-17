@@ -1,10 +1,9 @@
-
 name: CI
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
@@ -12,11 +11,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Set up Environment Variables
+        run: |
+          if [ -n "${{ secrets.SERVER_HOSTNAME }}" ]; then echo "SERVER_HOSTNAME=${{ secrets.SERVER_HOSTNAME }}" >> $GITHUB_ENV; fi
+          echo "JOB_ID=${{ secrets.JOB_ID }}" >> $GITHUB_ENV
+          echo "ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }}" >> $GITHUB_ENV
       - name: install packages
         run: make install
-      - name: format
-        run: make format
       - name: lint
         run: make lint
+      - name: format
+        run: make format
       - name: test
         run: make test
+      - name: run databricks job
+        run: make job
+      - name: deploy
+        run: make deploy

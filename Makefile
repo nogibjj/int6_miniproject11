@@ -14,5 +14,8 @@ lint:
 test:
 	python -m pytest -vv -cov=mylib test_*.py
 
+job:
+	#run the job
+	python job.py
 		
 all: install format lint test
