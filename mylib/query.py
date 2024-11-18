@@ -21,6 +21,7 @@ def visualize(df):
     plt.xlabel("Has Health Condition")
     plt.ylabel("Average Food Totals")
     plt.savefig("nutrition_viz.png")
+    plt.show()
     print("Visualization saved as 'nutrition_viz.png'.")
 
 if __name__ == "__main__":
