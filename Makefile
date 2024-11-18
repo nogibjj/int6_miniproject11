@@ -16,6 +16,6 @@ test:
 
 job:
 	#run the job
-	python job.py
+	python run_job.py
 		
 all: install format lint test
