@@ -1,5 +1,5 @@
 # int6_miniproject11
-[![CI](https://github.com/nogibjj/int6_miniproject10/actions/workflows/ci.yml/badge.svg)](https://github.com/nogibjj/int6_miniproject10/actions/workflows/ci.yml)
+[![CI](https://github.com/nogibjj/int6_miniproject11/actions/workflows/ci.yml/badge.svg)](https://github.com/nogibjj/int6_miniproject11/actions/workflows/ci.yml)
 
 ### File Structure
 ```
