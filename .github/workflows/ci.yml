@@ -26,5 +26,3 @@ jobs:
         run: make test
       - name: run databricks job
         run: make job
-      - name: deploy
-        run: make deploy
