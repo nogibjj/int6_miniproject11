@@ -3,7 +3,7 @@
 
 ### File Structure
 ```
-int6_miniproject10
+int6_miniproject11
 ├── .devcontainer/
 │   ├── devcontainer.json
 │   └── Dockerfile
@@ -20,22 +20,14 @@ int6_miniproject10
 ├── mylib
 │   ├── __init__.py
 │   ├── __pycache__
-│   └── lib.py
+│   ├── extract.py
+│   ├── transform_load.py
+│   └── query.py
 ├── run_job.py
 ├── requirements.txt
 └── test_main.py
 ```
 This repo contains work for mini-project 11. It sets up an environment on codespaces and uses Github Actions to run a Makefile for the following: `make install`, `make format`, `make lint`, `make test`, and `make job` . The dataset was sourced from the [fivethirtyeight github](https://github.com/fivethirtyeight/data/blob/master/nutrition-studies/raw_anonymized_data.csv) and details individuals' health and nutrition information.
-
-Some important components:
-
-* `Makefile`
-
-* `Dockerfile`
-
-* A base set of libraries for devops and web
-
-* `githubactions` 
 
 ## Purpose of project
 The purpose of this project is to create a data pipeline with Databricks to demonstrate extraction from a data source, transformation/loading into a data sink using PySpark, and querying using SQL.
@@ -56,17 +48,30 @@ The purpose of this project is to create a data pipeline with Databricks to demo
 - **CI/CD Automation**
   - To make sure github actions is working properly, I use a Makefile to test various parts of my code. `run_job.py` programmatically triggers a Databricks jobs.
 
-
 ## Preparation
-1. Create a Databricks workspace on Azure
-2. Connect Github account to Databricks Workspace
-3. Create global init script for cluster start to store enviornment variables
-4. Create a Databricks cluster that supports Pyspark
-5. Clone repo into Databricks workspace
-6. Create a job on Databricks to build pipeline
-7. Extract task (Data Source): mylib/extract.py
-8. Transform and Load Task (Data Sink): mylib/transform_load.py
-9. Query and Viz Task: mylib/query_viz.py
+1. Create a Databricks workspace and connect to Github
+2. Set up env variables
+3. Create a Databricks cluster that supports Pyspark
+4. Clone repo into Databricks workspace
+5. Create a job on Databricks to build pipeline with the following tasks:
+    - Extract task (Data Source): mylib/extract.py
+    - Transform and Load Task (Data Sink): mylib/transform_load.py
+    - Query Task: mylib/query.py
+
+## Outputs
+### Query Results
+
+| Has Health Condition | Avg Healthy | Avg Unhealthy |
+|---------------------|-------------|---------------|
+| true                | 17.77       | 10.18         |
+| false               | 20.93       | 10.73         |
+
+### Query Visualization
+<img width="600" alt="query visualization image" src=query_barplot.png>
+
+## Sample Job Run
+<img width="600" alt="successful run" src=job_run.png>
+<img width="600" alt="successful run" src=job_run_timeline.png>
 
 ## Check format and test errors 
 1. Format code `make format`
@@ -74,10 +79,3 @@ The purpose of this project is to create a data pipeline with Databricks to demo
 3. Test code `make test`
 
 <img width="600" alt="passing test cases image" src=pass_test.png>
-
-## Sample Job Run
-
-
-## Outputs
-Query visualization:
-<img width="600" alt="query visualization image" src=query_viz.png>

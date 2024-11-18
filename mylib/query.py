@@ -1,7 +1,6 @@
 from pyspark.sql import SparkSession
 import matplotlib.pyplot as plt
 from mylib.transform_load import transform_and_load
-from databricks.display import display
 
 def query_data():
     """Query data from Delta table."""
@@ -23,9 +22,9 @@ def visualize(df):
     plt.title("Average Healthy vs. Unhealthy Food Totals")
     plt.xlabel("Has Health Condition")
     plt.ylabel("Average Food Totals")
+    plt.savefig("nutrition_viz.png")
     plt.show()
-    display(plt.gcf())
-    #print("Visualization saved as 'nutrition_viz.png'.")
+    print("Visualization saved as 'nutrition_viz.png'.")
 
 if __name__ == "__main__":
     query_results = query_data()
