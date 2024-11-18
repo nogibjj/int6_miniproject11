@@ -23,14 +23,6 @@ jobs:
       - name: format
         run: make format
       - name: test
-        env:
-          SERVER_HOSTNAME: ${{ secrets.SERVER_HOSTNAME }}
-          JOB_ID: ${{ secrets.JOB_ID }}
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         run: make test
       - name: run databricks job
-        env:
-          SERVER_HOSTNAME: ${{ secrets.SERVER_HOSTNAME }}
-          JOB_ID: ${{ secrets.JOB_ID }}
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         run: make job
