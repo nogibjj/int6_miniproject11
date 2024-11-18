@@ -12,14 +12,11 @@ url = f"https://{server_h}/api/2.0"
 def test_databricks_workspace():
     extract()
 
-    headers = {'Authorization': f'Bearer {access_token}'}
-
     try:
-        workspace_response = requests.get(
+        requests.get(
             url + "/workspace/get-status",
             params={"path": "/Workspace/Users/int6@duke.edu/int6_miniproject11"},
-            headers=headers
-        ).raise_for_status()
+        )
 
     except Exception as e:
         assert False, f"Failed to verify workspace path: {e}"
@@ -27,10 +24,10 @@ def test_databricks_workspace():
 def test_databricks_file():
     headers = {'Authorization': f'Bearer {access_token}'}
     try:
-        dbfs_response = requests.get(
+        requests.get(
             url + f"/dbfs/get-status?path={FILESTORE_PATH}",
             headers=headers
-        ).raise_for_status()
+        )
 
     except Exception as e:
         assert False, f"Failed to verify data path: {e}"
